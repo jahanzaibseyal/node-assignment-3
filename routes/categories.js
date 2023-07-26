@@ -1,8 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const Category = require('../models/category');
+const authJWT = require('../middlewares/authMiddleware');
+const adminMiddleware = require('../middlewares/adminMiddleware');
 
-router.post('/', async (req, res) => {
+router.post('/', authJWT, adminMiddleware, async (req, res) => {
   try {
     const { name, parent } = req.body;
     const category = await Category.create({
@@ -15,7 +17,7 @@ router.post('/', async (req, res) => {
   }
 });
 
-router.get('/', async (req, res) => {
+router.get('/', authJWT, adminMiddleware, async (req, res) => {
   try {
     const categories = await Category.find();
     res.json(categories);
@@ -24,7 +26,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.get('/:categoryId', async (req, res) => {
+router.get('/:categoryId', authJWT, adminMiddleware, async (req, res) => {
   try {
     const category = await Category.findById(req.params.categoryId);
     if (!category) {
@@ -36,7 +38,7 @@ router.get('/:categoryId', async (req, res) => {
   }
 });
 
-router.put('/:categoryId', async (req, res) => {
+router.put('/:categoryId', authJWT, adminMiddleware, async (req, res) => {
   try {
     const { name, parent } = req.body;
     const updatedCategory = await Category.findByIdAndUpdate(
@@ -56,7 +58,7 @@ router.put('/:categoryId', async (req, res) => {
   }
 });
 
-router.delete('/:categoryId', async (req, res) => {
+router.delete('/:categoryId', authJWT, adminMiddleware, async (req, res) => {
   try {
     const deletedCategory = await Category.findByIdAndDelete(
       req.params.categoryId,

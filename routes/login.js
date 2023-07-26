@@ -17,11 +17,11 @@ router.post('/', async (req, res, next) => {
       return res.status(401).json({ message: 'Invalid email or password.' });
     }
     const token = jwt.sign(
-      { userId: user.id },
+      { userId: user.id, isAdmin: user.isAdmin },
       process.env.JWT_SECRET || 'tp7k6Umw3ABVELtl3k7jJyaBDK8yNm2a',
       {
         expiresIn: process.env.JWT_EXPIRES_IN || '1h',
-      }
+      },
     );
     res.json({ token });
   } catch (error) {

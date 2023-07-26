@@ -1,8 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const Product = require('../models/product');
+const authJWT = require('../middlewares/authMiddleware');
+const adminMiddleware = require('../middlewares/adminMiddleware');
 
-router.post('/', async (req, res) => {
+router.post('/', authJWT, adminMiddleware, async (req, res) => {
   try {
     const {
       title,
@@ -26,7 +28,7 @@ router.post('/', async (req, res) => {
   }
 });
 
-router.get('/', async (req, res) => {
+router.get('/', authJWT, adminMiddleware, async (req, res) => {
   try {
     const products = await Product.find();
     res.json(products);
@@ -35,7 +37,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.get('/:productId', async (req, res) => {
+router.get('/:productId', authJWT, adminMiddleware, async (req, res) => {
   try {
     const product = await Product.findById(req.params.productId);
     if (!product) {
@@ -47,7 +49,7 @@ router.get('/:productId', async (req, res) => {
   }
 });
 
-router.put('/:productId', async (req, res) => {
+router.put('/:productId', authJWT, adminMiddleware, async (req, res) => {
   try {
     const {
       title,
@@ -78,7 +80,7 @@ router.put('/:productId', async (req, res) => {
   }
 });
 
-router.delete('/:productId', async (req, res) => {
+router.delete('/:productId', authJWT, adminMiddleware, async (req, res) => {
   try {
     const deletedProduct = await Product.findByIdAndDelete(
       req.params.productId,
@@ -92,7 +94,14 @@ router.delete('/:productId', async (req, res) => {
   }
 });
 
-router.get('/search/:keyword', (req, res) => {
-  // Search products based on keyword
+router.get('/search/:keyword', authJWT, async (req, res) => {
+  try {
+    const searchTerm = req.params.keyword;
+    const regex = new RegExp(searchTerm, 'i');
+    const products = await Product.find({ title: { $regex: regex } });
+    res.json(products);
+  } catch (error) {
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
 });
 module.exports = router;

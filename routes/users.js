@@ -26,8 +26,8 @@ router.get('/:id', authJWT, async (req, res, next) => {
 
 router.post('/', authJWT, async (req, res, next) => {
   try {
-    const { name, email, password } = req.body;
-    const newUser = new User({ name, email, password });
+    const { name, email, password, isAdmin } = req.body;
+    const newUser = new User({ name, email, password, isAdmin });
     await newUser.save();
     res.json(newUser);
   } catch (error) {
@@ -37,11 +37,12 @@ router.post('/', authJWT, async (req, res, next) => {
 
 router.put('/:id', authJWT, async (req, res, next) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password, isAdmin } = req.body;
     const updatedUser = await User.findByIdAndUpdate(req.params.id, {
       name,
       email,
       password,
+      isAdmin,
     });
     if (!updatedUser) {
       return res.status(404).json({ message: 'User not found' });

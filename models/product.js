@@ -23,7 +23,6 @@ const productSchema = new mongoose.Schema({
     required: true,
   },
   otherProperties: {
-    // Customize based on the specific properties needed for each product
     type: Object,
   },
 });

@@ -1,23 +1,41 @@
 const express = require('express');
 const router = express.Router();
 const Cart = require('../models/cart');
+const authJWT = require('../middlewares/authMiddleware');
 
-router.post('/', async (req, res) => {
+router.post('/', authJWT, async (req, res) => {
   try {
-    const { user, items } = req.body;
-    const cart = await Cart.create({
-      user,
-      items,
-    });
-    res.status(201).json(cart);
+    const { product, quantity } = req.body;
+    const user = req.user.userId;
+    let cart = await Cart.findOne({ user });
+
+    if (!cart) {
+      cart = new Cart({
+        user,
+        items: [{ product, quantity }],
+      });
+    } else {
+      const existingItemIndex = cart.items.findIndex(
+        (item) => item.product.toString() === product,
+      );
+
+      if (existingItemIndex !== -1) {
+        cart.items[existingItemIndex].quantity += quantity;
+      } else {
+        cart.items.push({ product, quantity });
+      }
+    }
+
+    const savedCart = await cart.save();
+    res.status(201).json(savedCart);
   } catch (error) {
-    res.status(500).json({ message: 'Inernal Server error' });
+    res.status(500).json({ message: 'Internal Server error' });
   }
 });
 
-router.get('/', async (req, res) => {
+router.get('/', authJWT, async (req, res) => {
   try {
-    const userId = 'user_id'; // Replace 'user_id' with the actual user ID from authentication
+    const userId = req.user?.userId;
     const cart = await Cart.findOne({ user: userId }).populate('items.product');
     if (!cart) {
       return res.status(404).json({ message: 'Cart not found' });
@@ -28,9 +46,9 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.delete('/:productId', async (req, res) => {
+router.delete('/:productId', authJWT, async (req, res) => {
   try {
-    const userId = 'user_id'; // Replace 'user_id' with the actual user ID from authentication
+    const userId = req.user?.userId;
     const cart = await Cart.findOne({ user: userId });
     if (!cart) {
       return res.status(404).json({ message: 'Cart not found' });
