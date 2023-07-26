@@ -21,6 +21,8 @@
     "nodemon": "^2.0.22"
   },
   "devDependencies": {
+    "@faker-js/faker": "^8.0.2",
+    "Faker": "^0.7.2",
     "node-env-run": "^4.0.2"
   }
 }

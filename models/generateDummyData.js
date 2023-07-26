@@ -1,10 +1,10 @@
-const faker = require('faker');
+const { faker } = require('@faker-js/faker');
 const mongoose = require('mongoose');
 
 // Models
-const Product = require('./models/product');
-const Category = require('./models/category');
-const Cart = require('./models/cart');
+const Product = require('./product');
+const Category = require('./category');
+const Cart = require('./cart');
 
 // Generate a random category ID
 const generateCategoryId = () => {
@@ -24,7 +24,7 @@ const generateProducts = (numProducts) => {
       title: faker.commerce.productName(),
       description: faker.lorem.paragraph(),
       price: faker.commerce.price(),
-      availableQuantity: faker.random.number({ min: 10, max: 100 }),
+      availableQuantity: faker.number.int({ min: 10, max: 100 }),
       category: generateCategoryId(),
       otherProperties: {
         // Customize based on the specific properties needed for each product
@@ -52,7 +52,7 @@ const generateCategories = (numCategories, parentCategoryId = null) => {
 const generateCartItems = (products) => {
   const cartItems = [];
   for (const product of products) {
-    const quantity = faker.random.number({ min: 1, max: 5 });
+    const quantity = faker.number.int({ min: 1, max: 5 });
     const cartItem = {
       product: product._id,
       quantity,
@@ -73,12 +73,6 @@ const saveDummyData = async () => {
       },
     );
 
-    // Generate and save dummy data for products
-    const numProducts = 10;
-    const products = generateProducts(numProducts);
-    await Product.insertMany(products);
-    console.log('Dummy data for products saved successfully.');
-
     // Generate and save dummy data for categories
     const numCategories = 5;
     const categories = generateCategories(numCategories);
@@ -96,6 +90,12 @@ const saveDummyData = async () => {
     }
 
     console.log('Dummy data for categories saved successfully.');
+
+    // Generate and save dummy data for products
+    const numProducts = 10;
+    const products = generateProducts(numProducts);
+    await Product.insertMany(products);
+    console.log('Dummy data for products saved successfully.');
 
     // Generate and save dummy data for cart
     const numCartItems = 3;
