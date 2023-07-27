@@ -1,5 +1,4 @@
 const jwt = require('jsonwebtoken');
-const { promisify } = require('util');
 
 const authenticateJWT = async (req, res, next) => {
   const authHeader = req.headers.authorization;
@@ -9,7 +8,7 @@ const authenticateJWT = async (req, res, next) => {
     try {
       const decoded = await jwt.verify(
         token,
-        process.env.JWT_SECRET || 'tp7k6Umw3ABVELtl3k7jJyaBDK8yNm2a'
+        process.env.JWT_SECRET || 'tp7k6Umw3ABVELtl3k7jJyaBDK8yNm2a',
       );
       req.user = decoded;
       next();
