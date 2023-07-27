@@ -3,7 +3,7 @@ const router = express.Router();
 const User = require('../models/user');
 const authJWT = require('../middlewares/authMiddleware');
 
-router.post('/', async (req, res) => {
+router.post('/', async (req, res, next) => {
   try {
     const { name, email, password } = req.body;
     const isAdmin = false;
