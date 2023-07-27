@@ -7,7 +7,8 @@
     "lint": "eslint .",
     "precommit": "npm run lint",
     "precommit-check": "npm run lint",
-    "precommit-staged": "lint-staged"
+    "precommit-staged": "lint-staged",
+    "prepare": "husky install"
   },
   "lint-staged": {
     "*.js": "eslint --fix"
