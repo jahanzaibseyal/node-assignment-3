@@ -53,7 +53,7 @@ router.put('/:id', authJWT, async (req, res) => {
   }
 });
 
-router.delete('/:id', authJWT, async (req, res, next) => {
+router.delete('/:id', authJWT, async (req, res, nxt) => {
   try {
     const deletedUser = await User.findByIdAndDelete(req.params.id);
     if (!deletedUser) {
