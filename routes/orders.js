@@ -4,6 +4,7 @@ const Order = require('../models/order');
 const Cart = require('../models/cart');
 const authJWT = require('../middlewares/authMiddleware');
 const adminMiddleware = require('../middlewares/adminMiddleware');
+const sendEmail = require('../emailService');
 
 router.post('/', authJWT, async (req, res) => {
   try {
@@ -33,7 +34,19 @@ router.post('/', authJWT, async (req, res) => {
     });
 
     await newOrder.save();
-    await userCart.remove();
+    await Cart.deleteOne({ _id: userCart._id });
+
+    const user = req.user.email;
+    const subject = 'Order Confirmation';
+    const htmlContent = `
+      <h1>Thank you for your order!</h1>
+      <p>Your order has been placed successfully.</p>
+      <p>Order ID: ${newOrder._id}</p>
+      <p>Total Price: ${newOrder.totalPrice}</p>
+      <p>...</p>
+    `;
+
+    await sendEmail(user, subject, htmlContent);
 
     res.status(201).json(newOrder);
   } catch (error) {
