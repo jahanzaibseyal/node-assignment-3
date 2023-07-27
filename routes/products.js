@@ -69,7 +69,7 @@ router.put('/:productId', authJWT, adminMiddleware, async (req, res) => {
         category,
         otherProperties,
       },
-      { new: true },
+      { new: true }
     );
     if (!updatedProduct) {
       return res.status(404).json({ message: 'Product not found' });
@@ -83,7 +83,7 @@ router.put('/:productId', authJWT, adminMiddleware, async (req, res) => {
 router.delete('/:productId', authJWT, adminMiddleware, async (req, res) => {
   try {
     const deletedProduct = await Product.findByIdAndDelete(
-      req.params.productId,
+      req.params.productId
     );
     if (!deletedProduct) {
       return res.status(404).json({ message: 'Product not found' });

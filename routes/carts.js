@@ -16,7 +16,7 @@ router.post('/', authJWT, async (req, res) => {
       });
     } else {
       const existingItemIndex = cart.items.findIndex(
-        (item) => item.product.toString() === product,
+        (item) => item.product.toString() === product
       );
 
       if (existingItemIndex !== -1) {
@@ -55,7 +55,7 @@ router.delete('/:productId', authJWT, async (req, res) => {
     }
 
     cart.items = cart.items.filter(
-      (item) => item.product.toString() !== req.params.productId,
+      (item) => item.product.toString() !== req.params.productId
     );
     await cart.save();
 

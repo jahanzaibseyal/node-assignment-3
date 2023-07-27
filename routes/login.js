@@ -20,7 +20,7 @@ router.post('/', async (req, res) => {
       process.env.JWT_SECRET || 'tp7k6Umw3ABVELtl3k7jJyaBDK8yNm2a',
       {
         expiresIn: process.env.JWT_EXPIRES_IN || '1h',
-      },
+      }
     );
     res.json({ token });
   } catch (error) {

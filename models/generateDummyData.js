@@ -70,7 +70,7 @@ const saveDummyData = async () => {
       {
         useNewUrlParser: true,
         useUnifiedTopology: true,
-      },
+      }
     );
 
     // Generate and save dummy data for categories
@@ -84,7 +84,7 @@ const saveDummyData = async () => {
       const numSubCategories = 3;
       const subCategories = generateCategories(
         numSubCategories,
-        parentCategory._id,
+        parentCategory._id
       );
       await Category.insertMany(subCategories);
     }

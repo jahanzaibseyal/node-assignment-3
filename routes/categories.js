@@ -47,7 +47,7 @@ router.put('/:categoryId', authJWT, adminMiddleware, async (req, res) => {
         name,
         parent,
       },
-      { new: true },
+      { new: true }
     );
     if (!updatedCategory) {
       return res.status(404).json({ message: 'Category not found' });
@@ -61,7 +61,7 @@ router.put('/:categoryId', authJWT, adminMiddleware, async (req, res) => {
 router.delete('/:categoryId', authJWT, adminMiddleware, async (req, res) => {
   try {
     const deletedCategory = await Category.findByIdAndDelete(
-      req.params.categoryId,
+      req.params.categoryId
     );
     if (!deletedCategory) {
       return res.status(404).json({ message: 'Category not found' });
