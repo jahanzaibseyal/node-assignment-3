@@ -5,14 +5,15 @@
   "scripts": {
     "start": "nodemon ./bin/www",
     "lint": "eslint .",
-    "precommit": "lint-staged"
+    "precommit": "npm run lint",
+    "precommit-check": "npm run lint -- --quiet"
   },
   "lint-staged": {
     "*.js": "eslint --fix"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run precommit"
+      "pre-commit": "npm run precommit-check"
     }
   },
   "dependencies": {
