@@ -16,10 +16,14 @@ const categoryRoutes = require('./routes/categories');
 const cartRoutes = require('./routes/carts');
 const orderRoutes = require('./routes/orders');
 
+const dbHost = process.env.DB_HOST;
+const dbUser = process.env.DB_USER;
+const dbPass = process.env.DB_PASS;
+
 const app = express();
 
 mongoose.connect(
-  'mongodb+srv://seyaljahanzaib:bZHsiORMNP1txQ8h@cluster0.dtkknyf.mongodb.net/?retryWrites=true&w=majority',
+  `mongodb+srv://${dbUser}:${dbPass}@${dbHost}/?retryWrites=true&w=majority`,
   {
     useNewUrlParser: true,
     useUnifiedTopology: true,
